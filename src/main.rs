@@ -2,5 +2,5 @@ mod encoding;
 mod set1;
 
 fn main() {
-    println!("Hello, world!");
+    self::set1::challenge4::run();
 }

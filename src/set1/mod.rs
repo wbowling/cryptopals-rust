@@ -1,3 +1,4 @@
-mod challenge1;
-mod challenge2;
-mod challenge3;
+pub mod challenge1;
+pub mod challenge2;
+pub mod challenge3;
+pub mod challenge4;
