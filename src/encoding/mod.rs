@@ -1,3 +1,7 @@
+extern crate base64;
+
+use base64::encode;
+
 pub trait UnHexExt {
     fn unhex(&self) -> Vec<u8>;
 }
@@ -22,4 +26,8 @@ impl HexExt for Vec<u8> {
     fn hex(&self) -> String {
         hex::encode(&self)
     }
+}
+
+pub fn hex2b64(s: &str) -> String {
+    encode(&s.unhex())
 }

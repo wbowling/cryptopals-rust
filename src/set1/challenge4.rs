@@ -1,30 +1,42 @@
 use std::fs::File;
-
-use crate::encoding::UnHexExt;
-use crate::set1::challenge3::find_xor;
 use std::io::Read;
 
-pub fn run() -> bool {
+use crate::crypto::xor::find_xor;
+use crate::crypto::xor::xor;
+use crate::crypto::xor::XorScore;
+use crate::encoding::UnHexExt;
+
+pub fn run() {
+    test_find_xor();
+}
+
+fn get_lines() -> Vec<String> {
     let mut f = File::open("src/set1/data/4.txt").expect("file not found");
     let mut contents = String::new();
     f.read_to_string(&mut contents)
         .expect("something went wrong reading the file");
+    contents.split("\n").map(|s| s.to_string()).collect()
+}
 
-    let scores: Vec<(u8, String, i32)> = contents
-        .split("\n")
-        .map(|l| find_xor(&l.unhex()))
-        .filter_map(|l| l)
-        .collect();
-    if let Some((key, plain, score)) = scores.iter().max_by_key(|&o| o.2) {
-        println!("Key: 0x{:x}, {} ({})", key, plain, score);
-        true
-    } else {
-        false
-    }
+
+fn test_find_xor() {
+    let ( line, score) = get_lines()
+        .iter()
+        .map(|l| (l.clone(), find_xor(&l.as_str().unhex())))
+        .max_by(|a, b| a.1.cmp(&b.1))
+        .expect("xor not found");
+
+    assert_eq!(score, XorScore(53, 154));
+    assert_eq!(
+        String::from_utf8_lossy(&xor(
+            &line.as_str().unhex(),
+            &[score.0])
+        ),
+        String::from("Now that the party is jumping\n")
+    );
 }
 
 #[test]
-fn test_find_xor() {
-    assert_eq!(run(), true);
+pub fn test() {
+    run();
 }
-
