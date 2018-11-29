@@ -11,7 +11,7 @@ pub fn run() {
 }
 
 fn get_lines() -> Vec<String> {
-    let mut f = File::open("src/set1/data/4.txt").expect("file not found");
+    let mut f = File::open("data/4.txt").expect("file not found");
     let mut contents = String::new();
     f.read_to_string(&mut contents)
         .expect("something went wrong reading the file");
